@@ -1,20 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+session_start();
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./assets/main.css">
-  <title>Document</title>
-</head>
+require_once '../vendor/autoload.php';
 
-<body>
-  <div class="card">
-    <div class="card-header">
-      <h1 class="h1">hello world</h1>
-    </div>
-  </div>
-</body>
+use App\Database;
+use Dotenv\Dotenv;
 
-</html>
+$dotenv = Dotenv::createImmutable('../');
+$dotenv->load();
+
+$db = Database::getPDO();
+require '../src/router.php';

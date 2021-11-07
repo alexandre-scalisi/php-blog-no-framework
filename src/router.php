@@ -1,13 +1,18 @@
 <?php
 
 use App\Controller\ArticleController;
+use App\Controller\CategorieController;
 use Mezon\Router\Router;
-
 $router = new Router();
 
 $articleController = new ArticleController();
+$categorieController = new CategorieController();
 
+/* Article routes */
 $router->addRoute('/', [$articleController, 'index'], 'GET', 'article_index');
+
+/* Category routes */
+$router->addRoute('/category', [$categorieController, 'index'], 'GET', 'category_index');
 
 try {
   $returnedValues = $router->callRoute($_SERVER['REQUEST_URI']);

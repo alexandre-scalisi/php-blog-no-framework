@@ -1,3 +1,6 @@
+<?php
+
+use App\Helper\URLHelper; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,9 +24,10 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-link <?= $_SERVER['REQUEST_URI'] === $router->reverse('article_index') || 'index' ? 'active': null ?>"
-            href="#">Articles</a>
-          <a class="nav-link" href="#">Catégories</a>
+          <a class="nav-link <?= URLHelper::checkActive($router->reverse('article_index')) ?>"
+            href="/<?= $router->reverse('article_index') ?>">Articles</a>
+          <a class="nav-link <?= URLHelper::checkActive($router->reverse('category_index')) ?>"
+            href="/<?= $router->reverse('category_index') ?>">Catégories</a>
         </div>
       </div>
     </div>

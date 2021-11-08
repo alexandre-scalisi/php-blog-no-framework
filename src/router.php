@@ -3,6 +3,7 @@
 use App\Controller\ArticleController;
 use App\Controller\CategorieController;
 use Mezon\Router\Router;
+
 $router = new Router();
 
 $articleController = new ArticleController();

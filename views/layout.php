@@ -11,7 +11,7 @@ use App\Helper\URLHelper; ?>
   <link rel="stylesheet" href="./assets/main.css">
   <script src="./assets/bundle.js"></script>
 
-  <title><?= $title ?? 'Page title' ?></title>
+  <title><?= $pageTitle ?? 'Blog' ?></title>
 </head>
 
 <body>

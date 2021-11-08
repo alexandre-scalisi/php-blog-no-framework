@@ -18,17 +18,17 @@ class Database
   /**
    * static function to get an instance of PDO with optional options
    */
-  public static function getPDO(?array $options = [], ?array $pdoOptions = [
+  public static function getPDO(array $dbParameters = [], ?array $pdoOptions = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
   ]): PDO
   {
     if (self::$pdo !== null) return self::$pdo;
     
-    self::$db_host = $options['db_host'] ?? $_ENV['DB_HOST'] ?? 'localhost';
-    self::$db_name = $options['db_name'] ?? $_ENV['DB_NAME'] ?? 'php_project_db';
-    self::$db_user = $options['db_user'] ?? $_ENV['DB_USER'] ?? 'root';
-    self::$db_password = $options['db_password'] ?? $_ENV['DB_PASSWORD'] ?? '';
+    self::$db_host = $dbParameters['DB_HOST'] ;
+    self::$db_name = $dbParameters['DB_NAME'] ;
+    self::$db_user = $dbParameters['DB_USER'] ;
+    self::$db_password = $dbParameters['DB_PASSWORD'];
     
     self::createDBIfNotExists();
     

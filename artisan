@@ -1,0 +1,35 @@
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+$db_config = require_once __DIR__ . '/config/database.php';
+require_once __DIR__ . '/database/migrations/Migration.php';
+require_once __DIR__ . '/database/seeders/Seeder.php';
+$db = App\Database::getPDO($db_config);
+
+
+switch ($argv[1] ?? '') {
+  case 'migrate':
+    
+    echo "migrating \n";
+    Migration::migrate($db);
+    echo 'migrated';
+    break;
+    case 'seed':
+    echo "migrating \n";
+    Migration::migrate($db);
+    echo 'migrated';
+      echo "seeding \n";
+    Seeder::seed($db);
+    echo 'done seeding';
+    break;
+  case 'serve':
+    shell_exec('php -S localhost:8000 -t public');
+    break;
+  default:
+    echo 'lol';
+}
+
+exit();
+?>

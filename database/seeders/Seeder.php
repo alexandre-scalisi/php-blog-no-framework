@@ -59,7 +59,7 @@ class Seeder {
     for ($i = 1; $i <= $quantity; $i++) {
       self::$db->exec(
         "INSERT INTO category VALUES (
-    $i, 'name$i'
+    $i, 'category$i'
     )
     "
       );

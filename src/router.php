@@ -5,12 +5,13 @@ use App\Controller\CategorieController;
 use Mezon\Router\Router;
 
 $router = new Router();
-
-$articleController = new ArticleController();
+$articleController = new ArticleController($db);
 $categorieController = new CategorieController();
 
 /* Article routes */
 $router->addRoute('/', [$articleController, 'index'], 'GET', 'article_index');
+$router->addRoute('/article/new', [$articleController, 'new'], 'GET', 'article_new');
+$router->addRoute('/article/create', [$articleController, 'create'], 'POST', 'article_create');
 
 /* Category routes */
 $router->addRoute('/category', [$categorieController, 'index'], 'GET', 'category_index');

@@ -2,7 +2,8 @@
 
 use PHPUnit\Framework\TestCase;
 
-abstract class ModelBase extends TestCase {
+abstract class BaseModel extends TestCase
+{
   /** @var PDO */
   protected $db;
 
@@ -11,7 +12,8 @@ abstract class ModelBase extends TestCase {
   protected $db_user;
   protected $db_password;
 
-  protected function startAll() {
+  protected function startAll()
+  {
     $this->initDatabase();
     $this->createArticleTable();
     $this->fillArticleTable();
@@ -27,12 +29,12 @@ abstract class ModelBase extends TestCase {
   {
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
     $dotenv->load();
-    
+
     $this->db_host = $_ENV['DB_HOST'];
     $this->db_name = 'test_' . $_ENV['DB_NAME'];
     $this->db_user = $_ENV['DB_USER'];
-    $this->db_password = $_ENV['DB_PASSWORD'];    
-    
+    $this->db_password = $_ENV['DB_PASSWORD'];
+
     $this->db = new PDO(sprintf("mysql:host=$this->db_host"), $this->db_user, $this->db_password, [
       PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
@@ -40,10 +42,10 @@ abstract class ModelBase extends TestCase {
     $this->db->exec('DROP DATABASE IF EXISTS ' . $this->db_name);
     $this->db->exec('CREATE DATABASE IF NOT EXISTS ' . $this->db_name);
     $this->db->exec("use $this->db_name");
-
   }
 
-  protected function createArticleTable() {
+  protected function createArticleTable()
+  {
     $this->db->exec("DROP TABLE IF EXISTS article");
     $this->db->exec(
       "CREATE TABLE IF NOT EXISTS article (
@@ -56,7 +58,8 @@ abstract class ModelBase extends TestCase {
     );
   }
 
-  protected function fillArticleTable(int $quantity = 10) {
+  protected function fillArticleTable(int $quantity = 10)
+  {
     for ($i = 1; $i <= $quantity; $i++) {
       $date = date("Y-m-d H:i:s");
 
@@ -68,8 +71,9 @@ abstract class ModelBase extends TestCase {
       );
     }
   }
-  
-  protected function createCategoryTable() {
+
+  protected function createCategoryTable()
+  {
     $this->db->exec("DROP TABLE IF EXISTS category");
     $this->db->exec(
       "CREATE TABLE IF NOT EXISTS category (
@@ -78,9 +82,9 @@ abstract class ModelBase extends TestCase {
         PRIMARY KEY(id)             
       )"
     );
-    
   }
-  protected function fillCategoryTable(int $quantity = 10) {
+  protected function fillCategoryTable(int $quantity = 10)
+  {
     for ($i = 1; $i <= $quantity; $i++) {
 
       $this->db->exec(
@@ -91,8 +95,9 @@ abstract class ModelBase extends TestCase {
       );
     }
   }
-  
-  protected function createArticleCategoryTable() {
+
+  protected function createArticleCategoryTable()
+  {
     $this->db->exec("DROP TABLE IF EXISTS article_category");
     $this->db->exec(
       "CREATE TABLE IF NOT EXISTS article_category (
@@ -107,9 +112,9 @@ abstract class ModelBase extends TestCase {
           REFERENCES category(id)            
       )"
     );
-    
   }
-  protected function fillArticleCategoryTable(int $quantity = 10) {
+  protected function fillArticleCategoryTable(int $quantity = 10)
+  {
     for ($i = 1; $i <= $quantity; $i++) {
 
       $this->db->exec(
@@ -143,12 +148,10 @@ abstract class ModelBase extends TestCase {
       $password = password_hash('password' . $i, PASSWORD_BCRYPT);
       $this->db->exec(
         "INSERT INTO user VALUES (
-      $i, 'email$i@gmail.com', 'username$i', '$password', 20 + $i, null
-      )
-      "
+          $i, 'email$i@gmail.com', 'username$i', '$password', 20 + $i, null
+        )
+        "
       );
     }
   }
 }
-
-?>

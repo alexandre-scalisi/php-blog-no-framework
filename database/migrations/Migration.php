@@ -99,6 +99,7 @@ class Migration {
         password VARCHAR(100) NOT NULL,
         age INT,
         photo VARCHAR(255),
+        role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
         PRIMARY KEY(id)        
       )"
     );

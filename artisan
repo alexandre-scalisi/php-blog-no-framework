@@ -11,25 +11,23 @@ $db = App\Database::getPDO($db_config);
 
 switch ($argv[1] ?? '') {
   case 'migrate':
-    
     echo "migrating \n";
     Migration::migrate($db);
     echo 'migrated';
     break;
-    case 'seed':
+  case 'seed':
     echo "migrating \n";
     Migration::migrate($db);
     echo 'migrated';
-      echo "seeding \n";
+    echo "seeding \n";
     Seeder::seed($db);
     echo 'done seeding';
     break;
   case 'serve':
+    shell_exec('explorer http://localhost:8000');
     shell_exec('php -S localhost:8000 -t public');
     break;
-  default:
-    echo 'lol';
 }
-
+flush();
 exit();
 ?>

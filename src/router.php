@@ -1,12 +1,15 @@
 <?php
 
+use App\App;
 use App\Controller\ArticleController;
-use App\Controller\CategorieController;
+use App\Controller\AuthController;
+use App\Controller\CategoryController;
 use Mezon\Router\Router;
 
-$router = new Router();
-$articleController = new ArticleController($db);
-$categorieController = new CategorieController();
+$router = App::get(Router::class);
+$articleController = App::get(ArticleController::class);
+$categoryController = App::get(CategoryController::class);
+$authController = App::get(AuthController::class);
 
 /* Article routes */
 $router->addRoute('/', [$articleController, 'index'], 'GET', 'article_index');
@@ -14,7 +17,12 @@ $router->addRoute('/article/new', [$articleController, 'new'], 'GET', 'article_n
 $router->addRoute('/article/create', [$articleController, 'create'], 'POST', 'article_create');
 
 /* Category routes */
-$router->addRoute('/category', [$categorieController, 'index'], 'GET', 'category_index');
+$router->addRoute('/category', [$categoryController, 'index'], 'GET', 'category_index');
+
+/* Authentication routes */
+$router->addRoute('/login', [$authController, 'login'], ['GET','POST'], 'login');
+// $router->addRoute('/register', [$authController, 'login'], 'GET', 'login');
+
 
 try {
   $returnedValues = $router->callRoute($_SERVER['REQUEST_URI']);

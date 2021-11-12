@@ -1,7 +1,7 @@
 <?php 
 namespace App\Controller;
 
-class CategorieController {
+class CategoryController extends BaseController{
 
   public function index() {
     

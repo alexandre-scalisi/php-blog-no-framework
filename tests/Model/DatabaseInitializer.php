@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-abstract class BaseModel extends TestCase
+abstract class DatabaseInitializer extends TestCase
 {
   /** @var PDO */
   protected $db;
@@ -137,6 +137,7 @@ abstract class BaseModel extends TestCase
         password VARCHAR(100) NOT NULL,
         age INT,
         photo VARCHAR(255),
+        role ENUM('admin', 'user') NOT NULL DEFAULT 'user',
         PRIMARY KEY(id)        
       )"
     );
@@ -144,14 +145,21 @@ abstract class BaseModel extends TestCase
 
   protected function fillUserTable(int $quantity = 10)
   {
+    /* CREATE 10 USERS WITH ROLE USER */
     for ($i = 1; $i <= $quantity; $i++) {
       $password = password_hash('password' . $i, PASSWORD_BCRYPT);
       $this->db->exec(
-        "INSERT INTO user VALUES (
-          $i, 'email$i@gmail.com', 'username$i', '$password', 20 + $i, null
-        )
-        "
+        "INSERT INTO user (email, username, password, age) VALUES (
+        'email$i@gmail.com', 'username$i', '$password', 20 + $i)
+      "
       );
     }
+    /* CREATE 1 USER WITH ROLE ADMIN */
+    $password = password_hash('password', PASSWORD_BCRYPT);
+    $this->db->exec(
+      "INSERT INTO user (email, username, password, age, role) VALUES (
+      'admin@gmail.com', 'admin', '$password', 100, 'admin')
+    "
+    );
   }
 }

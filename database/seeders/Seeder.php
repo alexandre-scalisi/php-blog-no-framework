@@ -81,17 +81,22 @@ class Seeder {
   
   private static function fillUserTable(int $quantity = 10)
   {
+    /* CREATE 10 USERS WITH ROLE USER */
     for ($i = 1; $i <= $quantity; $i++) {
       $password = password_hash('password'.$i, PASSWORD_BCRYPT);
       self::$db->exec(
-        "INSERT INTO user VALUES (
-      $i, 'email$i@gmail.com', 'username$i', '$password', 20 + $i, null
-      )
+        "INSERT INTO user (email, username, password, age) VALUES (
+        'email$i@gmail.com', 'username$i', '$password', 20 + $i)
       "
       );
     }
+    /* CREATE 1 USER WITH ROLE ADMIN */
+    $password = password_hash('password', PASSWORD_BCRYPT);
+    self::$db->exec(
+      "INSERT INTO user (email, username, password, age, role) VALUES (
+      'admin@gmail.com', 'admin', '$password', 100, 'admin')
+    ");
   }
-
 }
 
 ?>

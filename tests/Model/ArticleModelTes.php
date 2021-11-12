@@ -2,9 +2,9 @@
 
 use App\Model\Article;
 
-require_once __DIR__ . '/BaseModel.php';
+require_once __DIR__ . '/DatabaseInitializer.php';
 
-class ArticleModelTest extends BaseModel
+class ArticleModelTest extends DatabaseInitializer
 {
 
   /** @var App\Model\Article */

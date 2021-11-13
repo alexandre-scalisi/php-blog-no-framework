@@ -18,26 +18,23 @@ class Database
   /**
    * static function to get an instance of PDO with optional options
    */
-  public static function getPDO(array $dbParameters = [], ?array $pdoOptions = [
+  public static function getPDO(?array $dbParameters = [], ?array $pdoOptions = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
-  ]): PDO
+  ])
   {
     if (self::$pdo !== null) return self::$pdo;
-    
-    self::$db_host = $dbParameters['DB_HOST'] ;
-    self::$db_name = $dbParameters['DB_NAME'] ;
-    self::$db_user = $dbParameters['DB_USER'] ;
+    self::$db_host = $dbParameters['DB_HOST'];
+    self::$db_name = $_ENV['ENV'] === 'test' ? 'test_' . $dbParameters['DB_NAME'] : $dbParameters['DB_NAME'];
+    self::$db_user = $dbParameters['DB_USER'];
     self::$db_password = $dbParameters['DB_PASSWORD'];
-    
     self::createDBIfNotExists();
-    
+
     try {
       self::$pdo = new PDO(sprintf('mysql:host=%s;dbname=%s', self::$db_host, self::$db_name), self::$db_user, self::$db_password, $pdoOptions);
     } catch (PDOException $e) {
       die('PDO error when trying to get PDO: ' . $e->getMessage());
     }
-
     return self::$pdo;
   }
 

@@ -1,49 +1,37 @@
 <?php 
+namespace Database\Migrations;
+
+use PDO;
+
 class Migration {
   /** @var PDO */
-  private static $db;
-  private static $db_name;
-  private static $db_user;
-  private static $db_host;
-  private static $db_password;
+  public $db;
 
-  public static function migrate(PDO $pdo) {
-    self::$db = $pdo;
-    self::startAll();
-    self::$db->exec('set foreign_key_checks = 1');
+  public function __construct(PDO $pdo) {
+    $this->db = $pdo;
+    
   }
 
-  private static function startAll()
+  public function startAll()
   {
-    self::initDatabase();
-    self::createArticleTable();
-    self::createCategoryTable();
-    self::createArticleCategoryTable();
-    self::createUserTable();
+    $this->db->exec('set foreign_key_checks = 1');
+    $this->initDatabase();
+    $this->createArticleTable();
+    $this->createCategoryTable();
+    $this->createArticleCategoryTable();
+    $this->createUserTable();
   }
 
 
-  private static function initDatabase()
+  public function initDatabase()
   {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
-    $dotenv->load();
-
-    self::$db_host = $_ENV['DB_HOST'];
-    self::$db_name = $_ENV['DB_NAME'];
-    self::$db_user = $_ENV['DB_USER'];
-    self::$db_password = $_ENV['DB_PASSWORD'];
-
-    self::$db = new PDO(sprintf("mysql:host=%s", self::$db_host), self::$db_user, self::$db_password, [
-      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
-    self::$db->exec('use ' . self::$db_name);
-    self::$db->exec('set foreign_key_checks = 0');
+    $this->db->exec('set foreign_key_checks = 0');
   }
 
-  private static function createArticleTable()
+  public function createArticleTable()
   {
-    self::$db->exec("DROP TABLE IF EXISTS article");
-    self::$db->exec(
+    $this->db->exec("DROP TABLE IF EXISTS article");
+    $this->db->exec(
       "CREATE TABLE IF NOT EXISTS article (
         id INT AUTO_INCREMENT,
         title VARCHAR(50) NOT NULL,
@@ -56,10 +44,10 @@ class Migration {
 
   
 
-  private static function createCategoryTable()
+  public function createCategoryTable()
   {
-    self::$db->exec("DROP TABLE IF EXISTS category");
-    self::$db->exec(
+    $this->db->exec("DROP TABLE IF EXISTS category");
+    $this->db->exec(
       "CREATE TABLE IF NOT EXISTS category (
         id INT AUTO_INCREMENT,
         name VARCHAR(50) NOT NULL UNIQUE,
@@ -70,10 +58,10 @@ class Migration {
   }
   
 
-  private static function createArticleCategoryTable()
+  public function createArticleCategoryTable()
   {
-    self::$db->exec("DROP TABLE IF EXISTS article_category");
-    self::$db->exec(
+    $this->db->exec("DROP TABLE IF EXISTS article_category");
+    $this->db->exec(
       "CREATE TABLE IF NOT EXISTS article_category (
         id INT AUTO_INCREMENT,
         article_id int NOT NULL,
@@ -88,10 +76,10 @@ class Migration {
     );
   }
   
-  private static function createUserTable()
+  public function createUserTable()
   {
-    self::$db->exec("DROP TABLE IF EXISTS user");
-    self::$db->exec(
+    $this->db->exec("DROP TABLE IF EXISTS user");
+    $this->db->exec(
       "CREATE TABLE IF NOT EXISTS user (
         id INT AUTO_INCREMENT,
         email VARCHAR(100) NOT NULL UNIQUE,

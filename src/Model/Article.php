@@ -31,41 +31,42 @@ class Article extends BaseModel
       'title', 'body'
     ];
     $articleResult = $this->insertHelper($validArticleParams, $params, 'article');
-    if(!array_key_exists('categories', $params))
-    throw new MissingParamsException(['categories']);
-    foreach($params['categories'] as $category) {
+    if (!array_key_exists('categories', $params))
+      throw new MissingParamsException(['categories']);
+    foreach ($params['categories'] as $category) {
       $validArticleCategoryParams = ['article_id', 'category_id'];
-      
+
       $actualArticleCategoryParams = [
         'category_id' => $category,
         'article_id' => $this->count()
       ];
-      
+
       $articleCategoryResult = $this->insertHelper($validArticleCategoryParams, $actualArticleCategoryParams, 'article_category');
     }
-    
+
     return $articleResult && $articleCategoryResult;
   }
   /**
    * @throws MissingParamsException
    */
-  private function insertHelper(array $expected, array $actual, string $tableName): bool {
+  private function insertHelper(array $expected, array $actual, string $tableName): bool
+  {
     $sanitizedProperties = ModelHelper::sanitize($expected, array_keys($actual));
     ModelHelper::checkSameParameters($expected, $sanitizedProperties);
-    
+
     $finalParams = array_filter($actual, function ($k) use ($sanitizedProperties) {
       return in_array($k, $sanitizedProperties);
     }, ARRAY_FILTER_USE_KEY);
 
     $setQuery = '';
-    foreach($expected as $v) {
+    foreach ($expected as $v) {
       $setQuery .= "$v = :$v,";
     }
 
     $setQuery = rtrim($setQuery, ',');
-    
-    $articleQuery = 
-    "INSERT INTO $tableName 
+
+    $articleQuery =
+      "INSERT INTO $tableName 
       SET $setQuery
     ";
 

@@ -27,30 +27,30 @@ use App\Helper\URLHelper; ?>
           <a class="nav-link <?= URLHelper::checkActive($router->reverse('article_index')) ?>"
             href="/<?= $router->reverse('article_index') ?>">Articles</a>
           <a class="nav-link <?= URLHelper::checkActive($router->reverse('category_index')) ?>"
-            href="/<?= $router->reverse('category_index') ?>">Catégories</a>
+            href="/<?= $router->reverse('category_index') ?>">Categories</a>
         </div>
       </div>
     </div>
   </nav>
 
+  <?php if(isset($_SESSION['success'])): ?>
+  <div class="alert alert-success">
+    <ul>
+
+      <?php foreach($_SESSION['success'] as $success):?>
+      <li><?= $success ?></li>
+      <?php endforeach ?>
+    </ul>
+  </div>
+
+  <?php endif ?>
 
   <div class="container mt-5">
-    <?php if (isset($_SESSION['errors'])) : ?>
-    <div class=" alert alert-danger">
-      <ul>
-        <?php foreach ($_SESSION['errors'] as $k => $error) : ?>
-        <li class="list-item">
-          <?= $k . ': ' . $error ?>
-        </li>
-        <?php endforeach ?>
-        <?php unset($_SESSION['errors']) ?>
-      </ul>
-    </div>
-    <?php endif ?>
-
     <?= $content ?>
   </div>
 
+  <?php if (isset($_SESSION['errors'])) unset($_SESSION['errors']) ?>
+  <?php if (isset($_SESSION['success'])) unset($_SESSION['success']) ?>
 </body>
 
 </html>

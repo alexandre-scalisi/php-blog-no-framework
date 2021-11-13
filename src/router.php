@@ -15,6 +15,7 @@ $authController = App::get(AuthController::class);
 $router->addRoute('/', [$articleController, 'index'], 'GET', 'article_index');
 $router->addRoute('/article/new', [$articleController, 'new'], 'GET', 'article_new');
 $router->addRoute('/article/create', [$articleController, 'create'], 'POST', 'article_create');
+$router->addRoute('/article/[i:id]', [$articleController, 'show'], 'GET', 'article_show');
 
 /* Category routes */
 $router->addRoute('/category', [$categoryController, 'index'], 'GET', 'category_index');

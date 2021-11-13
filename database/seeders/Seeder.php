@@ -1,50 +1,38 @@
 <?php 
+namespace Database\Seeders;
+
+use PDO;
+
 class Seeder {
 
-  private static $db;
-  private static $db_name;
-  private static $db_user;
-  private static $db_host;
-  private static $db_password;
+  private $db;
 
-  public static function seed(PDO $pdo)
+  public function __construct(PDO $db)
   {
-    self::$db = $pdo;
-    self::startAll();
+    $this->db = $db;
   }
   
-  private static function startAll()
+  public function startAll()
   {
     
-    self::initDatabase();
-    self::fillArticleTable();
-    self::fillCategoryTable();
-    self::fillArticleCategoryTable();
-    self::fillUserTable();
-    self::$db->exec('set foreign_key_checks = 1');
+    $this->initDatabase();
+    $this->fillArticleTable();
+    $this->fillCategoryTable();
+    $this->fillArticleCategoryTable();
+    $this->fillUserTable();
+    $this->db->exec('set foreign_key_checks = 1');
   }
 
-  private static function initDatabase()
+  public function initDatabase()
   {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
-    $dotenv->load();
-
-    self::$db_host = $_ENV['DB_HOST'];
-    self::$db_name = $_ENV['DB_NAME'];
-    self::$db_user = $_ENV['DB_USER'];
-    self::$db_password = $_ENV['DB_PASSWORD'];
-
-    self::$db = new PDO(sprintf("mysql:host=%s;dbname=%s", self::$db_host, self::$db_name), self::$db_user, self::$db_password, [
-      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
-    self::$db->exec('set foreign_key_checks = 0');
+    $this->db->exec('set foreign_key_checks = 0');
   }
 
-  private static function fillArticleTable(int $quantity = 10)
+  public function fillArticleTable(int $quantity = 10)
   {
     for ($i = 1; $i <= $quantity; $i++) {
       $date = date("Y-m-d H:i:s");
-      self::$db->exec(
+      $this->db->exec(
         "INSERT INTO article VALUES (
   $i, 'title$i', '$date', 'lorem ipsum$i'
   )
@@ -54,10 +42,10 @@ class Seeder {
   }
 
 
-  private static function fillCategoryTable(int $quantity = 10)
+  public function fillCategoryTable(int $quantity = 10)
   {
     for ($i = 1; $i <= $quantity; $i++) {
-      self::$db->exec(
+      $this->db->exec(
         "INSERT INTO category VALUES (
     $i, 'category$i'
     )
@@ -67,10 +55,10 @@ class Seeder {
   }
 
 
-  private static function fillArticleCategoryTable(int $quantity = 10)
+  public function fillArticleCategoryTable(int $quantity = 10)
   {
     for ($i = 1; $i <= $quantity; $i++) {
-      self::$db->exec(
+      $this->db->exec(
         "INSERT INTO article_category VALUES (
       $i, $i, $i
       )
@@ -79,12 +67,12 @@ class Seeder {
     }
   }
   
-  private static function fillUserTable(int $quantity = 10)
+  public function fillUserTable(int $quantity = 10)
   {
     /* CREATE 10 USERS WITH ROLE USER */
     for ($i = 1; $i <= $quantity; $i++) {
       $password = password_hash('password'.$i, PASSWORD_BCRYPT);
-      self::$db->exec(
+      $this->db->exec(
         "INSERT INTO user (email, username, password, age) VALUES (
         'email$i@gmail.com', 'username$i', '$password', 20 + $i)
       "
@@ -92,7 +80,7 @@ class Seeder {
     }
     /* CREATE 1 USER WITH ROLE ADMIN */
     $password = password_hash('password', PASSWORD_BCRYPT);
-    self::$db->exec(
+    $this->db->exec(
       "INSERT INTO user (email, username, password, age, role) VALUES (
       'admin@gmail.com', 'admin', '$password', 100, 'admin')
     ");

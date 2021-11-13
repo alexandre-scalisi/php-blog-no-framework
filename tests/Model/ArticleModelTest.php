@@ -1,10 +1,11 @@
 <?php
 
 use App\Model\Article;
+use App\Model\Category;
 
-require_once __DIR__ . '/DatabaseInitializer.php';
+require __DIR__ . '/BaseModel.php';
 
-class ArticleModelTest extends DatabaseInitializer
+class ArticleModelTest extends BaseModel
 {
 
   /** @var App\Model\Article */
@@ -14,7 +15,9 @@ class ArticleModelTest extends DatabaseInitializer
   public function start()
   {
     $this->startAll();
-    $this->article = new Article($this->db);
+    $this->article = App\App::get(Article::class);
+    
+    
   }
 
   public function testDatabaseWorks()
@@ -33,13 +36,13 @@ class ArticleModelTest extends DatabaseInitializer
   {
     $articles = $this->article->all();
     $this->assertEquals(10, count($articles));
-    $this->assertInstanceOf(App\Model\Article::class, $articles[0]);
+    $this->assertInstanceOf(Article::class, $articles[0]);
   }
 
   public function testSelectFirstArticle()
   {
     $article = $this->article->first();
-    $this->assertInstanceOf(App\Model\Article::class, $article);
+    $this->assertInstanceOf(Article::class, $article);
     $this->assertEquals(1, $article->id);
   }
 
@@ -57,7 +60,7 @@ class ArticleModelTest extends DatabaseInitializer
     $categories = $article->categories();
     $this->assertEquals(1, $article->id);
     $this->assertNotEmpty($categories);
-    $this->assertInstanceOf(App\Model\Category::class, $categories[0]);
+    $this->assertInstanceOf(Category::class, $categories[0]);
     $this->assertEquals(1, $categories[0]->id);
   }
 

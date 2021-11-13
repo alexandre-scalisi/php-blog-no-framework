@@ -18,7 +18,7 @@ class BaseModel
     $splittedClassName = explode('\\', get_class($this));
     $this->table_name = strtolower(array_pop($splittedClassName));
   }
-
+  
   public function all(): ?array
   {
     $query = "SELECT * FROM $this->table_name";

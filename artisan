@@ -1,26 +1,34 @@
 #!/usr/bin/env php
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
+
+use App\App;
+use App\Database;
+use Database\Migrations\Migration;
+use Database\Seeders\Seeder;
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
-$db_config = require_once __DIR__ . '/config/database.php';
-require_once __DIR__ . '/database/migrations/Migration.php';
-require_once __DIR__ . '/database/seeders/Seeder.php';
-$db = App\Database::getPDO($db_config);
+$dbConfig = require_once __DIR__ . '/config/database.php';
 
+App::set(PDO::class, function () use ($dbConfig) {
+  return Database::getPDO($dbConfig);
+});
+
+$db = App::get(PDO::class);
 
 switch ($argv[1] ?? '') {
   case 'migrate':
     echo "migrating \n";
-    Migration::migrate($db);
-    echo 'migrated';
+    App::get(Migration::class);
+    echo "migrated\n";
     break;
-  case 'seed':
-    echo "migrating \n";
-    Migration::migrate($db);
+    case 'seed':
+      echo "migrating \n";
+      App::get(Migration::class);
     echo 'migrated';
     echo "seeding \n";
-    Seeder::seed($db);
+    App::get(Seeder::class);
     echo 'done seeding';
     break;
   case 'serve':
